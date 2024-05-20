@@ -35,7 +35,8 @@ namespace EmployeeManagement.Database.Repositories
             Department departmentToUpdate = GetById(id);
             departmentToUpdate.Name = department.Name;
             departmentToUpdate.Description = department.Description;
-            departmentToUpdate.UpdatedAt = DateTime.Now;
+            if (_context.Entry(departmentToUpdate).State == EntityState.Modified)
+                departmentToUpdate.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
             return departmentToUpdate;
         }

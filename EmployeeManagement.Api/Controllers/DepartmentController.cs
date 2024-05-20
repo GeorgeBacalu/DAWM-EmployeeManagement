@@ -1,5 +1,5 @@
 ﻿using EmployeeManagement.Core.Services;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Api.Controllers

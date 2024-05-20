@@ -46,7 +46,8 @@ namespace EmployeeManagement.Database.Repositories
             employeeToUpdate.Grade = employee.Grade;
             employeeToUpdate.Salary = employee.Salary;
             employeeToUpdate.HiredAt = employee.HiredAt;
-            employeeToUpdate.UpdatedAt = DateTime.Now;
+            if (_context.Entry(employeeToUpdate).State == EntityState.Modified)
+                employeeToUpdate.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
             return employeeToUpdate;
         }

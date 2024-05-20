@@ -1,6 +1,6 @@
 ﻿using EmployeeManagement.Database.Entities;
 
-namespace EmployeeManagement.Database.Dtos
+namespace EmployeeManagement.Database.Dtos.Common
 {
     public class EmployeeDto : BaseEntity
     {

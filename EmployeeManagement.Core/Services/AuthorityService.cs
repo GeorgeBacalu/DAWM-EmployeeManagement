@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Core.Mappings;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
 using EmployeeManagement.Database.Repositories;
 
 namespace EmployeeManagement.Core.Services

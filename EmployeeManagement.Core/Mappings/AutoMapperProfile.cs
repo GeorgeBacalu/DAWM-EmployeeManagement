@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
 using EmployeeManagement.Database.Entities;
 
 namespace EmployeeManagement.Core.Mappings

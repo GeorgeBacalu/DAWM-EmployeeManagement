@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Core.Mappings;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
 using EmployeeManagement.Database.Entities;
 using EmployeeManagement.Database.Repositories;
 
@@ -22,10 +22,10 @@ namespace EmployeeManagement.Core.Services
 
         public EmployeeDto Add(EmployeeDto employeeDto)
         {
-            Employee employeeToSave = employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper);
-            _employeeRepository.LinkRoleToEmployee(employeeToSave);
-            _employeeRepository.LinkAuthoritiesToEmployee(employeeToSave);
-            return _employeeRepository.Add(employeeToSave).ToDto(_mapper);
+            Employee employeeToAdd = employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper);
+            _employeeRepository.LinkRoleToEmployee(employeeToAdd);
+            _employeeRepository.LinkAuthoritiesToEmployee(employeeToAdd);
+            return _employeeRepository.Add(employeeToAdd).ToDto(_mapper);
         }
 
         public EmployeeDto UpdateById(EmployeeDto employeeDto, int id) => _employeeRepository.UpdateById(employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper), id).ToDto(_mapper);
