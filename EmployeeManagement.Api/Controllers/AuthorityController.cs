@@ -6,7 +6,7 @@ namespace EmployeeManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorityController : ControllerBase
+    public class AuthorityController : BaseController
     {
         private readonly AuthorityService _authorityService;
 

@@ -12,11 +12,13 @@ namespace EmployeeManagement.Core.Mappings
             CreateMap<Department, DepartmentDto>();
             CreateMap<Employee, EmployeeDto>();
             CreateMap<Role, RoleDto>();
+            CreateMap<User, UserDto>();
 
             CreateMap<AuthorityDto, Authority>();
             CreateMap<DepartmentDto, Department>();
             CreateMap<EmployeeDto, Employee>();
             CreateMap<RoleDto, Role>();
+            CreateMap<UserDto, User>();
         }
     }
 }

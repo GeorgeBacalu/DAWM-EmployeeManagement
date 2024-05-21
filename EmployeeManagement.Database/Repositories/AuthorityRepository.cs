@@ -23,7 +23,11 @@ namespace EmployeeManagement.Database.Repositories
         {
             IList<Authority> authorities = GetAll();
             if (role.Type == RoleType.User)
-                authorities.ToList().RemoveAll(authority => authority.Type == AuthorityType.Delete);
+            {
+                List<Authority> authoritiesCopy = authorities.ToList();
+                authoritiesCopy.RemoveAll(authority => authority.Type == AuthorityType.Delete);
+                return authoritiesCopy;
+            }
             return authorities;
         }
 

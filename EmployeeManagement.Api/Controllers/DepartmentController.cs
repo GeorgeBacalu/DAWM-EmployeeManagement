@@ -1,12 +1,14 @@
 ﻿using EmployeeManagement.Core.Services;
 using EmployeeManagement.Database.Dtos.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : ControllerBase
+    [Authorize]
+    public class DepartmentController : BaseController
     {
         private readonly DepartmentService _departmentService;
 
@@ -24,6 +26,8 @@ namespace EmployeeManagement.Api.Controllers
 
         [HttpPut("{id}")] public IActionResult UpdateById(DepartmentDto departmentDto, int id) => Ok(_departmentService.UpdateById(departmentDto, id));
 
-        [HttpDelete("{id}")] public IActionResult DisableById(int id) => Ok(_departmentService.DisableById(id));
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DisableById(int id) => Ok(_departmentService.DisableById(id));
     }
 }
