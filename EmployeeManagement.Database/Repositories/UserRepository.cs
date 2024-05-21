@@ -24,6 +24,13 @@ namespace EmployeeManagement.Database.Repositories
             .FirstOrDefault(user => user.Id == id)
             ?? throw new Exception($"User with id {id} not found");
 
+        public User GetByEmail(string email) => _context.Users
+            .Include(user => user.Role)
+            .Include(user => user.Authorities)
+            .Where(user => user.DeletedAt == null)
+            .FirstOrDefault(user => user.Email == email)
+            ?? throw new Exception($"User with email {email} not found");
+
         public User Add(User user)
         {
             user.CreatedAt = DateTime.Now;

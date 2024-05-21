@@ -19,6 +19,14 @@ namespace EmployeeManagement.Database.Repositories
             .FirstOrDefault(authority => authority.Id == id)
             ?? throw new Exception($"Authority with id {id} not found");
 
+        public IList<Authority> GetByRole(Role role)
+        {
+            IList<Authority> authorities = GetAll();
+            if (role.Type == RoleType.User)
+                authorities.ToList().RemoveAll(authority => authority.Type == AuthorityType.Delete);
+            return authorities;
+        }
+
         public Authority Add(Authority authority)
         {
             authority.CreatedAt = DateTime.Now;
