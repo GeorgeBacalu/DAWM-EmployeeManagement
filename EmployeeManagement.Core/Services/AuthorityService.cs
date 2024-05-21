@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Core.Mappings;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
+using EmployeeManagement.Database.Entities;
 using EmployeeManagement.Database.Repositories;
 
 namespace EmployeeManagement.Core.Services
@@ -12,10 +13,23 @@ namespace EmployeeManagement.Core.Services
 
         public AuthorityService(AuthorityRepository authorityRepository, IMapper mapper) => (_authorityRepository, _mapper) = (authorityRepository, mapper);
 
-        public IList<AuthorityDto> GetAll() => _authorityRepository.GetAll().ToDtos(_mapper);
+        public IList<AuthorityDto> GetAll()
+        {
+            IList<AuthorityDto> authorityDtos = _authorityRepository.GetAll().ToDtos(_mapper);
+            return authorityDtos;
+        }
 
-        public AuthorityDto GetById(int id) => _authorityRepository.GetById(id).ToDto(_mapper);
+        public AuthorityDto GetById(int id)
+        {
+            AuthorityDto authorityDto = _authorityRepository.GetById(id).ToDto(_mapper);
+            return authorityDto;
+        }
 
-        public AuthorityDto Add(AuthorityDto authorityDto) => _authorityRepository.Add(authorityDto.ToEntity(_mapper)).ToDto(_mapper);
+        public AuthorityDto Add(AuthorityDto authorityDto)
+        {
+            Authority authorityToAdd = authorityDto.ToEntity(_mapper);
+            AuthorityDto addedAuthorityDto = _authorityRepository.Add(authorityToAdd).ToDto(_mapper);
+            return addedAuthorityDto;
+        }
     }
 }

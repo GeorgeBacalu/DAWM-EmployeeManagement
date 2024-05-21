@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public AuthorityType Type { get; set; }
+        public IList<User> Users { get; set; } = null!;
         public IList<Employee> Employees { get; set; } = null!;
     }
 

@@ -10,19 +10,27 @@ namespace EmployeeManagement.Database.Repositories
 
         public EmployeeRepository(EmployeeManagementDbContext context) => _context = context;
 
-        public IList<Employee> GetAll() => _context.Employees
-            .Include(employee => employee.Role)
-            .Include(employee => employee.Authorities)
-            .Where(employee => employee.DeletedAt == null)
-            .OrderBy(employee => employee.CreatedAt)
-            .ToList();
+        public IList<Employee> GetAll()
+        {
+            IList<Employee> employees = _context.Employees
+                .Include(employee => employee.Role)
+                .Include(employee => employee.Authorities)
+                .Where(employee => employee.DeletedAt == null)
+                .OrderBy(employee => employee.CreatedAt)
+                .ToList();
+            return employees;
+        }
 
-        public Employee GetById(int id) => _context.Employees
-            .Include(employee => employee.Role)
-            .Include(employee => employee.Authorities)
-            .Where(employee => employee.DeletedAt == null)
-            .FirstOrDefault(employee => employee.Id == id)
-            ?? throw new Exception($"Employee with id {id} not found");
+        public Employee GetById(int id)
+        {
+            Employee employee = _context.Employees
+                .Include(employee => employee.Role)
+                .Include(employee => employee.Authorities)
+                .Where(employee => employee.DeletedAt == null)
+                .FirstOrDefault(employee => employee.Id == id)
+                ?? throw new Exception($"Employee with id {id} not found");
+            return employee;
+        }
 
         public Employee Add(Employee employee)
         {
@@ -46,7 +54,8 @@ namespace EmployeeManagement.Database.Repositories
             employeeToUpdate.Grade = employee.Grade;
             employeeToUpdate.Salary = employee.Salary;
             employeeToUpdate.HiredAt = employee.HiredAt;
-            employeeToUpdate.UpdatedAt = DateTime.Now;
+            if (_context.Entry(employeeToUpdate).State == EntityState.Modified)
+                employeeToUpdate.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
             return employeeToUpdate;
         }

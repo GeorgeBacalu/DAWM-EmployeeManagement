@@ -9,15 +9,23 @@ namespace EmployeeManagement.Database.Repositories
 
         public RoleRepository(EmployeeManagementDbContext context) => _context = context;
 
-        public IList<Role> GetAll() => _context.Roles
-            .Where(role => role.DeletedAt == null)
-            .OrderBy(role => role.CreatedAt)
-            .ToList();
+        public IList<Role> GetAll()
+        {
+            IList<Role> roles = _context.Roles
+                .Where(role => role.DeletedAt == null)
+                .OrderBy(role => role.CreatedAt)
+                .ToList();
+            return roles;
+        }
 
-        public Role GetById(int id) => _context.Roles
-            .Where(role => role.DeletedAt == null)
-            .FirstOrDefault(role => role.Id == id)
-            ?? throw new Exception($"Role with id {id} not found");
+        public Role GetById(int id)
+        {
+            Role role = _context.Roles
+                .Where(role => role.DeletedAt == null)
+                .FirstOrDefault(role => role.Id == id)
+                ?? throw new Exception($"Role with id {id} not found");
+            return role;
+        }
 
         public Role Add(Role role)
         {

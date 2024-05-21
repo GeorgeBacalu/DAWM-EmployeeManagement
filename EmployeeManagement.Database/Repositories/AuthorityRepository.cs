@@ -9,15 +9,33 @@ namespace EmployeeManagement.Database.Repositories
 
         public AuthorityRepository(EmployeeManagementDbContext context) => _context = context;
 
-        public IList<Authority> GetAll() => _context.Authorities
-            .Where(authority => authority.DeletedAt == null)
-            .OrderBy(authority => authority.CreatedAt)
-            .ToList();
+        public IList<Authority> GetAll()
+        {
+            IList<Authority> authorities = _context.Authorities
+                .Where(authority => authority.DeletedAt == null)
+                .OrderBy(authority => authority.CreatedAt)
+                .ToList();
+            return authorities;
+        }
 
-        public Authority GetById(int id) => _context.Authorities
-            .Where(authority => authority.DeletedAt == null)
-            .FirstOrDefault(authority => authority.Id == id)
-            ?? throw new Exception($"Authority with id {id} not found");
+        public Authority GetById(int id)
+        {
+            Authority authority = _context.Authorities
+                .Where(authority => authority.DeletedAt == null)
+                .FirstOrDefault(authority => authority.Id == id)
+                ?? throw new Exception($"Authority with id {id} not found");
+            return authority;
+        }
+
+        public IList<Authority> GetByRole(Role role)
+        {
+            IList<Authority> authoritiesByRole = _context.Authorities
+                .Where(authority => authority.DeletedAt == null)
+                .Where(authority => role.Type != RoleType.User || authority.Type != AuthorityType.Delete)
+                .OrderBy(authority => authority.CreatedAt)
+                .ToList();
+            return authoritiesByRole;
+        }
 
         public Authority Add(Authority authority)
         {

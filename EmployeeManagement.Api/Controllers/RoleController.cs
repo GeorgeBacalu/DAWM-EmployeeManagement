@@ -1,25 +1,33 @@
 ﻿using EmployeeManagement.Core.Services;
-using EmployeeManagement.Database.Dtos;
+using EmployeeManagement.Database.Dtos.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleController : ControllerBase
+    public class RoleController : BaseController
     {
         private readonly RoleService _roleService;
 
         public RoleController(RoleService roleService) => _roleService = roleService;
 
-        [HttpGet] public IActionResult GetAll() => Ok(_roleService.GetAll());
+        [HttpGet] public IActionResult GetAll()
+        {
+            IList<RoleDto> result = _roleService.GetAll();
+            return Ok(result);
+        }
 
-        [HttpGet("{id}")] public IActionResult GetById(int id) => Ok(_roleService.GetById(id));
+        [HttpGet("{id}")] public IActionResult GetById(int id)
+        {
+            RoleDto result = _roleService.GetById(id);
+            return Ok(result);
+        }
 
         [HttpPost] public IActionResult Add(RoleDto roleDto)
         {
-            RoleDto savedRoleDto = _roleService.Add(roleDto);
-            return CreatedAtAction(nameof(GetById), new { id = savedRoleDto.Id }, savedRoleDto);
+            RoleDto addedRoleDto = _roleService.Add(roleDto);
+            return CreatedAtAction(nameof(GetById), new { id = addedRoleDto.Id }, addedRoleDto);
         }
     }
 }

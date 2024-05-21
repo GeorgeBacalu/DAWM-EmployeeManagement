@@ -8,13 +8,19 @@ namespace EmployeeManagement.Database.Context
     {
         public EmployeeManagementDbContext(DbContextOptions<EmployeeManagementDbContext> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Authority> Authorities { get; set; }
-        public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(user => user.Name).IsUnique();
+                entity.HasIndex(user => user.Email).IsUnique();
+            });
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.HasIndex(employee => employee.Name).IsUnique();
