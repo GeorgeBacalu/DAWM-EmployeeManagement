@@ -7,10 +7,17 @@ namespace EmployeeManagement.Core.Mappings
 {
     public static class DepartmentMappingExtensions
     {
-        public static IList<DepartmentDto> ToDtos(this IList<Department> departments, IMapper mapper) => departments.Select(department => department.ToDto(mapper)).ToList();
+        public static IList<DepartmentDto> ToDtos(this IList<Department> departments, IMapper mapper)
+        {
+            IList<DepartmentDto> departmentDtos = departments.Select(department => department.ToDto(mapper)).ToList();
+            return departmentDtos;
+        }
 
-        public static IList<Department> ToEntities(this IList<DepartmentDto> departmentDtos, EmployeeRepository employeeRepository, IMapper mapper) => 
-            departmentDtos.Select(departmentDto => departmentDto.ToEntity(employeeRepository, mapper)).ToList();
+        public static IList<Department> ToEntities(this IList<DepartmentDto> departmentDtos, EmployeeRepository employeeRepository, IMapper mapper)
+        {
+            IList<Department> departments = departmentDtos.Select(departmentDto => departmentDto.ToEntity(employeeRepository, mapper)).ToList();
+            return departments;
+        }
 
         public static DepartmentDto ToDto(this Department department, IMapper mapper)
         {

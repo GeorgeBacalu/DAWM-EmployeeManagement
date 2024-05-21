@@ -10,26 +10,38 @@ namespace EmployeeManagement.Database.Repositories
 
         public UserRepository(EmployeeManagementDbContext context) => _context = context;
 
-        public IList<User> GetAll() => _context.Users
-            .Include(user => user.Role)
-            .Include(user => user.Authorities)
-            .Where(user => user.DeletedAt == null)
-            .OrderBy(user => user.CreatedAt)
-            .ToList();
+        public IList<User> GetAll()
+        {
+            IList<User> users = _context.Users
+                .Include(user => user.Role)
+                .Include(user => user.Authorities)
+                .Where(user => user.DeletedAt == null)
+                .OrderBy(user => user.CreatedAt)
+                .ToList();
+            return users;
+        }
 
-        public User GetById(int id) => _context.Users
-            .Include(user => user.Role)
-            .Include(user => user.Authorities)
-            .Where(user => user.DeletedAt == null)
-            .FirstOrDefault(user => user.Id == id)
-            ?? throw new Exception($"User with id {id} not found");
+        public User GetById(int id)
+        {
+            User user = _context.Users
+                .Include(user => user.Role)
+                .Include(user => user.Authorities)
+                .Where(user => user.DeletedAt == null)
+                .FirstOrDefault(user => user.Id == id)
+                ?? throw new Exception($"User with id {id} not found");
+            return user;
+        }
 
-        public User GetByEmail(string email) => _context.Users
-            .Include(user => user.Role)
-            .Include(user => user.Authorities)
-            .Where(user => user.DeletedAt == null)
-            .FirstOrDefault(user => user.Email == email)
-            ?? throw new Exception($"User with email {email} not found");
+        public User GetByEmail(string email)
+        {
+            User user = _context.Users
+                .Include(user => user.Role)
+                .Include(user => user.Authorities)
+                .Where(user => user.DeletedAt == null)
+                .FirstOrDefault(user => user.Email == email)
+                ?? throw new Exception($"User with email {email} not found");
+            return user;
+        }
 
         public User Add(User user)
         {

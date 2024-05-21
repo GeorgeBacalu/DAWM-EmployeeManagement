@@ -16,20 +16,38 @@ namespace EmployeeManagement.Core.Services
         public EmployeeService(EmployeeRepository employeeRepository, RoleRepository roleRepository, AuthorityRepository authorityRepository, IMapper mapper) => 
             (_employeeRepository, _roleRepository, _authorityRepository, _mapper) = (employeeRepository, roleRepository, authorityRepository, mapper);
 
-        public IList<EmployeeDto> GetAll() => _employeeRepository.GetAll().ToDtos(_mapper);
+        public IList<EmployeeDto> GetAll()
+        {
+            IList<EmployeeDto> employeeDtos = _employeeRepository.GetAll().ToDtos(_mapper);
+            return employeeDtos;
+        }
 
-        public EmployeeDto GetById(int id) => _employeeRepository.GetById(id).ToDto(_mapper);
+        public EmployeeDto GetById(int id)
+        {
+            EmployeeDto employeeDto = _employeeRepository.GetById(id).ToDto(_mapper);
+            return employeeDto;
+        }
 
         public EmployeeDto Add(EmployeeDto employeeDto)
         {
             Employee employeeToAdd = employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper);
             _employeeRepository.LinkRoleToEmployee(employeeToAdd);
             _employeeRepository.LinkAuthoritiesToEmployee(employeeToAdd);
-            return _employeeRepository.Add(employeeToAdd).ToDto(_mapper);
+            EmployeeDto addedEmployeeDto = _employeeRepository.Add(employeeToAdd).ToDto(_mapper);
+            return addedEmployeeDto;
         }
 
-        public EmployeeDto UpdateById(EmployeeDto employeeDto, int id) => _employeeRepository.UpdateById(employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper), id).ToDto(_mapper);
+        public EmployeeDto UpdateById(EmployeeDto employeeDto, int id)
+        {
+            Employee employeeToUpdate = employeeDto.ToEntity(_roleRepository, _authorityRepository, _mapper);
+            EmployeeDto updatedEmployeeDto = _employeeRepository.UpdateById(employeeToUpdate, id).ToDto(_mapper);
+            return updatedEmployeeDto;
+        }
 
-        public EmployeeDto DisableById(int id) => _employeeRepository.DisableById(id).ToDto(_mapper);
+        public EmployeeDto DisableById(int id)
+        {
+            EmployeeDto disabledEmployeeDto = _employeeRepository.DisableById(id).ToDto(_mapper);
+            return disabledEmployeeDto;
+        }
     }
 }

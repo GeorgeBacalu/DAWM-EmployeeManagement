@@ -31,8 +31,9 @@ namespace EmployeeManagement.Core.Services
                 Expires = DateTime.Now.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256) // the token will be signed with this hashing algorithm
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            SecurityToken? securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            string? token = tokenHandler.WriteToken(securityToken);
+            return token;
         }
 
         public bool ValidateToken(string tokenString)

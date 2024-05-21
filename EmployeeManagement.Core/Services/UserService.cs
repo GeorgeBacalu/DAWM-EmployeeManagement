@@ -18,9 +18,17 @@ namespace EmployeeManagement.Core.Services
         public UserService(UserRepository userRepository, RoleRepository roleRepository, AuthorityRepository authorityRepository, SecurityService securityService, IMapper mapper) =>
             (_userRepository, _roleRepository, _authorityRepository, _securityService, _mapper) = (userRepository, roleRepository, authorityRepository, securityService, mapper);
 
-        public IList<UserDto> GetAll() => _userRepository.GetAll().ToDtos(_mapper);
+        public IList<UserDto> GetAll()
+        {
+            IList<UserDto> userDtos = _userRepository.GetAll().ToDtos(_mapper);
+            return userDtos;
+        }
 
-        public UserDto GetById(int id) => _userRepository.GetById(id).ToDto(_mapper);
+        public UserDto GetById(int id)
+        {
+            UserDto userDto = _userRepository.GetById(id).ToDto(_mapper);
+            return userDto;
+        }
 
         public UserDto? Register(RegisterRequest payload)
         {
@@ -38,7 +46,8 @@ namespace EmployeeManagement.Core.Services
             user.Authorities = _authorityRepository.GetByRole(user.Role);
             _userRepository.LinkRoleToUser(user);
             _userRepository.LinkAuthoritiesToUser(user);
-            return _userRepository.Add(user).ToDto(_mapper);
+            UserDto registeredUserDto = _userRepository.Add(user).ToDto(_mapper);
+            return registeredUserDto;
         }
 
         public string? Login(LoginRequest payload)
@@ -46,11 +55,21 @@ namespace EmployeeManagement.Core.Services
             if (payload == null) return null;
             User user = _userRepository.GetByEmail(payload.Email);
             string hashedPassword = _securityService.HashPassword(payload.Password, Convert.FromBase64String(user.PasswordSalt));
-            return hashedPassword == user.Password ? _securityService.GetToken(user, user.Role.Type.ToString()) : throw new Exception("Invalid password");
+            string? token = _securityService.GetToken(user, user.Role.Type.ToString());
+            return hashedPassword == user.Password ? token : throw new Exception("Invalid password");
         }
 
-        public UserDto UpdateById(UserDto userDto, int id) => _userRepository.UpdateById(userDto.ToEntity(_roleRepository, _authorityRepository, _mapper), id).ToDto(_mapper);
+        public UserDto UpdateById(UserDto userDto, int id)
+        {
+            User userToUpdate = userDto.ToEntity(_roleRepository, _authorityRepository, _mapper);
+            UserDto updatedUserDto = _userRepository.UpdateById(userToUpdate, id).ToDto(_mapper);
+            return updatedUserDto;
+        }
 
-        public UserDto DisableById(int id) => _userRepository.DisableById(id).ToDto(_mapper);
+        public UserDto DisableById(int id)
+        {
+            UserDto disabledUserDto = _userRepository.DisableById(id).ToDto(_mapper);
+            return disabledUserDto;
+        }
     }
 }

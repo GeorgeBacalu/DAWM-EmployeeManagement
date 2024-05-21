@@ -12,14 +12,22 @@ namespace EmployeeManagement.Api.Controllers
 
         public AuthorityController(AuthorityService authorityService) => _authorityService = authorityService;
 
-        [HttpGet] public IActionResult GetAll() => Ok(_authorityService.GetAll());
+        [HttpGet] public IActionResult GetAll()
+        {
+            IList<AuthorityDto> result = _authorityService.GetAll();
+            return Ok(result);
+        }
 
-        [HttpGet("{id}")] public IActionResult GetById(int id) => Ok(_authorityService.GetById(id));
+        [HttpGet("{id}")] public IActionResult GetById(int id)
+        {
+            AuthorityDto result = _authorityService.GetById(id);
+            return Ok(result);
+        }
 
         [HttpPost] public IActionResult Add(AuthorityDto authorityDto)
         {
-            AuthorityDto savedAuthorityDto = _authorityService.Add(authorityDto);
-            return CreatedAtAction(nameof(GetById), new { id = savedAuthorityDto.Id }, savedAuthorityDto);
+            AuthorityDto addedAuthorityDto = _authorityService.Add(authorityDto);
+            return CreatedAtAction(nameof(GetById), new { id = addedAuthorityDto.Id }, addedAuthorityDto);
         }
     }
 }

@@ -15,22 +15,46 @@ namespace EmployeeManagement.Api.Controllers
 
         public UserController(UserService userService) => _userService = userService;
 
-        [HttpGet] public IActionResult GetAll() => Ok(_userService.GetAll());
+        [HttpGet] public IActionResult GetAll()
+        {
+            IList<UserDto> result = _userService.GetAll();
+            return Ok(new { loggedInUserId = GetUserId(), users = result });
+        }
 
-        [HttpGet("{id}")] public IActionResult GetById(int id) => Ok(_userService.GetById(id));
+        [HttpGet("{id}")] public IActionResult GetById(int id)
+        {
+            UserDto result = _userService.GetById(id);
+            return Ok(new { loggedInUserId = GetUserId(), user = result });
+        }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public IActionResult Register(RegisterRequest payload) => Ok(_userService.Register(payload));
+        public IActionResult Register(RegisterRequest payload)
+        {
+            UserDto? registeredUserDto = _userService.Register(payload);
+            return CreatedAtAction(nameof(GetById), new { id = registeredUserDto?.Id }, registeredUserDto);
+        }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public IActionResult Login(LoginRequest payload) => Ok(new { token = _userService.Login(payload) });
+        public IActionResult Login(LoginRequest payload)
+        {
+            string? result = _userService.Login(payload);
+            return Ok(new { token = result });
+        }
 
-        [HttpPut("{id}")] public IActionResult UpdateById(UserDto userDto, int id) => Ok(_userService.UpdateById(userDto, id));
+        [HttpPut("{id}")] public IActionResult UpdateById(UserDto userDto, int id)
+        {
+            UserDto result = _userService.UpdateById(userDto, id);
+            return Ok(new { loggedInUserId = GetUserId(), updatedUser = result });
+        }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DisableById(int id) => Ok(_userService.DisableById(id));
+        public IActionResult DisableById(int id)
+        {
+            UserDto result = _userService.DisableById(id);
+            return Ok(new { loggedInUserId = GetUserId(), disabledUser = result });
+        }
     }
 }

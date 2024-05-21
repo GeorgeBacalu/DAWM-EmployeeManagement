@@ -14,20 +14,36 @@ namespace EmployeeManagement.Api.Controllers
 
         public DepartmentController(DepartmentService departmentService) => _departmentService = departmentService;
 
-        [HttpGet] public IActionResult GetAll() => Ok(_departmentService.GetAll());
+        [HttpGet] public IActionResult GetAll()
+        {
+            IList<DepartmentDto> result = _departmentService.GetAll();
+            return Ok(new { loggedInUserId = GetUserId(), departments = result });
+        }
 
-        [HttpGet("{id}")] public IActionResult GetById(int id) => Ok(_departmentService.GetById(id));
+        [HttpGet("{id}")] public IActionResult GetById(int id)
+        {
+            DepartmentDto result = _departmentService.GetById(id);
+            return Ok(new { loggedInUserId = GetUserId(), department = result });
+        }
 
         [HttpPost] public IActionResult Add(DepartmentDto departmentDto)
         {
-            DepartmentDto savedDepartmentDto = _departmentService.Add(departmentDto);
-            return CreatedAtAction(nameof(GetById), new { id = savedDepartmentDto.Id }, savedDepartmentDto);
+            DepartmentDto addedDepartmentDto = _departmentService.Add(departmentDto);
+            return CreatedAtAction(nameof(GetById), new { id = addedDepartmentDto.Id }, addedDepartmentDto);
         }
 
-        [HttpPut("{id}")] public IActionResult UpdateById(DepartmentDto departmentDto, int id) => Ok(_departmentService.UpdateById(departmentDto, id));
+        [HttpPut("{id}")] public IActionResult UpdateById(DepartmentDto departmentDto, int id)
+        {
+            DepartmentDto result = _departmentService.UpdateById(departmentDto, id);
+            return Ok(new { loggedInUserId = GetUserId(), updatedDepartment = result });
+        }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DisableById(int id) => Ok(_departmentService.DisableById(id));
+        public IActionResult DisableById(int id)
+        {
+            DepartmentDto result = _departmentService.DisableById(id);
+            return Ok(new { loggedInUserId = GetUserId(), disabledDepartment = result });
+        }
     }
 }

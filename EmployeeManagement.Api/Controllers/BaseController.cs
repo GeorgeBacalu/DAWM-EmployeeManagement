@@ -13,7 +13,7 @@ namespace EmployeeManagement.Api.Controllers
             string? token = rawToken?.Substring("Bearer ".Length).Trim();
             var parserToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
             string? rawUserId = parserToken.Claims.First(claim => claim.Type == "userId").Value;
-            int userId = Int32.Parse(rawUserId);
+            int userId = int.Parse(rawUserId);
             return userId;
         }
     }

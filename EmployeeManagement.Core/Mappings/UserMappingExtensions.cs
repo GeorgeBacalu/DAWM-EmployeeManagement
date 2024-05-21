@@ -7,10 +7,17 @@ namespace EmployeeManagement.Core.Mappings
 {
     public static class UserMappingExtensions
     {
-        public static IList<UserDto> ToDtos(this IList<User> users, IMapper mapper) => users.Select(user => user.ToDto(mapper)).ToList();
+        public static IList<UserDto> ToDtos(this IList<User> users, IMapper mapper)
+        {
+            IList<UserDto> userDtos = users.Select(user => user.ToDto(mapper)).ToList();
+            return userDtos;
+        }
 
-        public static IList<User> ToEntities(this IList<UserDto> userDtos, RoleRepository roleRepository, AuthorityRepository authorityRepository, IMapper mapper) =>
-            userDtos.Select(userDto => userDto.ToEntity(roleRepository, authorityRepository, mapper)).ToList();
+        public static IList<User> ToEntities(this IList<UserDto> userDtos, RoleRepository roleRepository, AuthorityRepository authorityRepository, IMapper mapper)
+        {
+            IList<User> users = userDtos.Select(userDto => userDto.ToEntity(roleRepository, authorityRepository, mapper)).ToList();
+            return users;
+        }
 
         public static UserDto ToDto(this User user, IMapper mapper)
         {
